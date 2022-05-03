@@ -416,8 +416,12 @@ static THD_FUNCTION(ppm_thread, arg) {
 			static bool was_duty_control = false;
 			static float duty_rev = 0.0;
 
-			if (servo_val < -0.92 && duty_highest_abs < (mcconf->l_min_duty * 1.5) &&
-					current_highest_abs < (mcconf->l_current_max * mcconf->l_current_max_scale * 0.7)) {
+			if (
+				servo_val < -0.92 
+				&& duty_highest_abs < (mcconf->l_min_duty * 1.5) 
+				&& current_highest_abs < (mcconf->l_current_max * mcconf->l_current_max_scale * 0.7)
+				&& rpm_now <= 500 // Do not start duty control mode until low forward rpm
+			) {
 				duty_control = true;
 			}
 
